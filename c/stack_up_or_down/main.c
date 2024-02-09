@@ -14,9 +14,9 @@ typedef unsigned long long ptr_t;
 /// @brief Allocate a variable on the stack.
 /// @return Address of that variable
 ptr_t inner() {
-	int x = 0;
+	int temp = 0;
 	
-	return (ptr_t)&x;
+	return (ptr_t)&temp;
 }
 
 int main(void) {
