@@ -17,6 +17,7 @@ from colorama import Fore
 
 colorama.init()
 
+SECOND_COLOR = Fore.BLACK
 
 class Dictionary:
     def __init__(self):
@@ -76,11 +77,11 @@ class Dictionary:
         for meaning in lookup["meanings"]:
             meaning_lines = [
                 "",
-                f"{Fore.BLACK}({meaning['speech_part']}){Fore.RESET} {meaning["def"]}",
+                f"{SECOND_COLOR}({meaning['speech_part']}){Fore.RESET} {meaning["def"]}",
             ]
             if "synonyms" in meaning.keys():
                 meaning_lines.append((
-                    f"  {Fore.BLACK}Synonyms:{Fore.RESET} "
+                    f"  {SECOND_COLOR}Synonyms:{Fore.RESET} "
                     f"{", ".join(meaning['synonyms'])}"
                 ))
 
@@ -103,7 +104,7 @@ def query(word):
 def main():
     try:
         while True:
-            word = input(f"{Fore.BLACK}Enter a word:{Fore.RESET} ").strip().lower()
+            word = input(f"{SECOND_COLOR}Enter a word:{Fore.RESET} ").strip().lower()
 
             print(query(word))
             print("")
