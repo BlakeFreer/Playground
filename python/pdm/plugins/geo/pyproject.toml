@@ -1,0 +1,30 @@
+[project]
+name = "bkmath-geo"
+version = "0.1.0"
+description = "plugin for bkmath"
+authors = [
+    {name = "BlakeFreer"},
+]
+dependencies = [
+    "numpy>=1.26.4",
+    "bkmath>=0.2.0",
+]
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[[tool.pdm.source]]
+name = "private"
+url = "file:///C:/repos/GeneralCode/python/pdm/package_index"
+verify_ssl = false
+
+
+[tool.pdm]
+distribution = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bkmath"]
