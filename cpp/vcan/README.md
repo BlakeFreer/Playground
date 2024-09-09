@@ -9,11 +9,4 @@ Create 2 programs which interface over SocketCAN (vcan).
 
 _From <https://en.wikipedia.org/wiki/SocketCAN>_
 
-```bash
-modprobe can
-modprobe can_raw
-modprobe vcan
-sudo ip link add dev vcan0 type vcan
-sudo ip link set up vcan0
-ip link show vcan0
-```
+Run `source vcan_setup.sh` to load the CAN modules.
