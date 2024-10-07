@@ -8,3 +8,7 @@ rand_distr = "0.4"
 rand = "0.8"
 nalgebra = { version = "0.33", features = ["rand"] }
 clap = { version = "4.5.19", features = ["derive"] }
+
+[[bin]]
+name = "linear_least_squares"
+path = "src/main.rs"
