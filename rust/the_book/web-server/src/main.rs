@@ -35,6 +35,10 @@ fn handle_connection(mut stream: TcpStream) {
             thread::sleep(Duration::from_secs(5));
             ("HTTP/1.1 200 OK", "html/hello.html")
         }
+        "GET /print HTTP/1.1" => {
+            println!("This is print");
+            ("HTTP/1.1 200 OK", "html/hello.html")
+        }
         _ => ("HTTP/1.1 404 NOT FOUND", "html/404.html"),
     };
 
