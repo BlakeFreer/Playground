@@ -82,6 +82,7 @@ fn handle_fit(args: FitArgs) -> Result<(), io::Error> {
         },
     };
 
+    println!("Fitting a degree {} polynomial.", args.degree);
     let poly = Polynomial::fit(&noisy_data, args.degree).unwrap();
 
     let err = rms(&noisy_data
