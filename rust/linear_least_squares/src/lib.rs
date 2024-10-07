@@ -4,13 +4,23 @@ use crate::polynomial::Polynomial;
 use nalgebra as na;
 use rand;
 use rand_distr::Normal;
+use std::fs::{self, File};
+use std::io::BufReader;
+use std::io::{self, prelude::*};
+use std::path::PathBuf;
 
-pub fn save_matrix<T1, T2, R>(matrix: &na::Matrix<f64, T1, T2, R>, filename: &str)
+pub fn save_matrix<T1, T2, R>(matrix: &na::Matrix<f64, T1, T2, R>, filename: &PathBuf)
 where
     T1: na::Dim,
     T2: na::Dim,
     R: na::Storage<f64, T1, T2>,
 {
+    // Create directory, if needed
+    match filename.parent() {
+        Some(parent) => fs::create_dir_all(parent).expect("Failed to create directory for output."),
+        None => {}
+    }
+
     let matrix_str = matrix
         .row_iter()
         .map(|row| {
@@ -22,7 +32,32 @@ where
         .collect::<Vec<String>>()
         .join("\n");
 
-    std::fs::write(filename, matrix_str.as_bytes()).expect("Failed to write.");
+    std::fs::write(filename, matrix_str.as_bytes()).expect("Failed to write to file");
+}
+
+pub fn load_matrix(filename: &PathBuf, delimiter: char) -> Result<na::MatrixXx2<f64>, io::Error> {
+    // let f = match File::open(filename) {
+    //     Ok(file) => file,
+    //     Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Err("missing"),
+    //     Err(_) => return Err("other problem"),
+    // };
+    let f = File::open(filename)?;
+    let f = BufReader::new(f);
+
+    let data: Vec<Vec<f64>> = f
+        .lines()
+        .map(|line| {
+            line.unwrap()
+                .split(delimiter)
+                .map(|x| x.parse::<f64>().expect("Invalid number."))
+                .collect::<Vec<f64>>()
+        })
+        .collect();
+
+    Ok(na::MatrixXx2::from_row_iterator(
+        data.len(),
+        data.iter().flatten().cloned(),
+    ))
 }
 
 pub fn linspace(start: f64, stop: f64, count: usize) -> Vec<f64> {
@@ -43,9 +78,9 @@ pub fn rms(x: &Vec<f64>) -> f64 {
 ///
 /// The `y` values come from the polynomial at `x` with added Gaussian
 /// noise.
-pub fn make_data(p: &Polynomial, pt_count: usize, y_noise_std: f64) -> na::MatrixXx2<f64> {
+pub fn make_data(p: &Polynomial, pt_count: usize, noise: f64) -> na::MatrixXx2<f64> {
     let dist_x = rand::distributions::Uniform::new(-5.0, 5.0);
-    let dist_y = Normal::new(0.0, y_noise_std).unwrap();
+    let dist_y = Normal::new(0.0, noise).unwrap();
 
     let mut rng = rand::thread_rng();
     let pt_x = na::DVector::from_distribution(pt_count, &dist_x, &mut rng);
