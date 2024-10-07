@@ -1,8 +1,8 @@
 # Linear Least Squares
 
-![image](example.png)
-
 Calculate and plot the best polynomial through a set of noisy data points.
+
+![image](example.png)
 
 ## Requirements
 
