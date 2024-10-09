@@ -1,11 +1,11 @@
+use core::fmt;
+use std::collections::HashMap;
 
 #[derive(Debug)]
-enum Transition {
+enum Item {
     Mushroom,
-    Fire,
+    FireFlower,
     Feather,
-    Revive,
-    Damage,
 }
 
 #[derive(Debug, Clone)]
@@ -15,10 +15,40 @@ enum Powerup {
     Cape,
 }
 
-#[derive(Debug, Clone)]
+fn item_to_powerup(item: &Item) -> Powerup {
+    match item {
+        Item::Mushroom => Powerup::Super,
+        Item::FireFlower => Powerup::Fire,
+        Item::Feather => Powerup::Cape
+    }
+}
+
+#[derive(Debug)]
+enum Transition {
+    Revive,
+    Damage,
+    GetItem(Item)
+}
+
+#[derive(Clone)]
 enum State {
     Alive(Option<Powerup>),
     Dead,
+}
+
+impl fmt::Display for State {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result  {
+        match self {
+            State::Dead => write!(f, "Dead")?,
+            State::Alive(powerup) => {
+                if let Some(powerup) = powerup {
+                    write!(f, "{:?}", powerup)?
+                }
+                write!(f, "Mario")?
+            }
+        }
+        Ok(())
+    }
 }
 
 fn transition(state: &mut State, transition: Transition) {
@@ -42,7 +72,7 @@ fn transition(state: &mut State, transition: Transition) {
     };
 
     // Move to the new state.
-    println!("{:?} + {:?} = {:?}", state, transition, new_state);
+    println!("{} + {:?} = {}", state, transition, new_state);
     *state = new_state;
 }
 
