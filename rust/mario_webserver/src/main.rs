@@ -8,38 +8,56 @@ enum Transition {
     Damage,
 }
 
+#[derive(Debug, Clone)]
 enum Powerup {
     Super,
     Fire,
     Cape,
 }
 
+#[derive(Debug, Clone)]
 enum State {
     Alive(Option<Powerup>),
     Dead,
 }
 
 fn transition(state: &mut State, transition: Transition) {
-    match state {
-        State::Alive(powerup) => match (powerup, transition) {
-            (None, Transition::Mushroom) => *state = State::Alive(Some(Powerup::Super)),
-            (None, Transition::Damage) => *state = State::Dead,
-            (_, Transition::Fire) => *state = State::Alive(Some(Powerup::Fire)),
-            (_, Transition::Feather) => *state = State::Alive(Some(Powerup::Cape)),
-            (Some(Powerup::Fire) | Some(Powerup::Cape), Transition::Damage) => *state = State::Alive(Some(Powerup::Super)),
-            (Some(Powerup::Super), Transition::Damage) => *state = State::Alive(None),
-            (_, Transition::Revive) => {},
-            (Some(_), Transition::Mushroom) => {},
+    // Determine if a new state is reached by this transition.
+    let new_state = match &state {
+        State::Alive(powerup) => match (powerup, &transition) {
+            (powerup, Transition::Damage) => match powerup {
+                None => State::Dead,
+                Some(Powerup::Super) => State::Alive(None),
+                Some(_) => State::Alive(Some(Powerup::Super))
+            }
+            (None, Transition::Mushroom) => State::Alive(Some(Powerup::Super)),
+            (_, Transition::Fire) => State::Alive(Some(Powerup::Fire)),
+            (_, Transition::Feather) => State::Alive(Some(Powerup::Cape)),
+            _ => state.clone(),
         }
         State::Dead => match transition {
-            Transition::Revive => *state = State::Alive(None),
-            _ => *state = State::Dead,
+            Transition::Revive => State::Alive(None),
+            _ => State::Dead,
         }
-    }
+    };
+
+    // Move to the new state.
+    println!("{:?} + {:?} = {:?}", state, transition, new_state);
+    *state = new_state;
 }
 
 fn main() {
     let mut state = State::Alive(None);
     transition(&mut state, Transition::Fire);
-    println!("Hello, world!");
+    transition(&mut state, Transition::Fire);
+    transition(&mut state, Transition::Feather);
+    transition(&mut state, Transition::Damage);
+    transition(&mut state, Transition::Fire);
+    transition(&mut state, Transition::Mushroom);
+    transition(&mut state, Transition::Damage);
+    transition(&mut state, Transition::Damage);
+    transition(&mut state, Transition::Damage);
+    transition(&mut state, Transition::Mushroom);
+    transition(&mut state, Transition::Damage);
+    transition(&mut state, Transition::Revive);
 }
