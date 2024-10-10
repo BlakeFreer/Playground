@@ -1,7 +1,5 @@
 # Mario Web Server
 
-## Description
-
 The World's worst Mario Game :tm: in your browser!
 
 Mario's health is represented with Rust's enum system to create a finite state machine. Use the browser links to transition through the possible states.
