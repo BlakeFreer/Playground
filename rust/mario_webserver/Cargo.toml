@@ -4,3 +4,11 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+askama = "0.12.1"
+serde_plain = "1.0.2"
+strum = { version = "0.26.3", features = ["derive"] }
+strum_macros = "0.26.4"
+
+[[bin]]
+name = "linear_least_squares"
+path = "src/main.rs"
