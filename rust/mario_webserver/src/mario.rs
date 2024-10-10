@@ -69,7 +69,7 @@ impl fmt::Display for State {
 }
 
 pub fn transition(state: &State, transition: Transition) -> State {
-    // Determine if a new state is reached by this transition.
+    // Determine which state is reached by this transition.
     match &state {
         State::Alive(health) => match &transition {
             Transition::Damage => match health {
@@ -78,7 +78,7 @@ pub fn transition(state: &State, transition: Transition) -> State {
                 Health::Powerup(_) => State::Alive(Health::Super),
             },
             Transition::GetItem(item) => match (health, item) {
-                (Health::Powerup(_), Item::Mushroom) => state.clone(),
+                (Health::Powerup(_), Item::Mushroom) => state.clone(), // don't demote powerup to SuperMario
                 (_, item) => State::Alive(item_to_health(item)),
             },
             Transition::Revive => state.clone(),

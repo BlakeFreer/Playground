@@ -2,20 +2,24 @@
 <html lang="en">
 
 <head>
-	<meta charset="utf-8">
-	<title>World's worst Mario game</title>
+    <meta charset="utf-8">
+    <title>World's Worst Mario Game</title>
 </head>
 
 <body>
-	<h1>It's a me, {{ marioname }}</h1>
-	<h2>Transitions</h2>
-	{% for transition in transitions %}
-		<a href="/transition/{{ transition }}">{{ transition }}</a>
-	{% endfor %}
-	<h2>Items</h2>
-	{% for item in items %}
-		<a href="/transition/item/{{ item }}">{{ item }}</a>
-	{% endfor %}
+    <h1>{{ marioname }}</h1>
+    <h2>Transitions</h2>
+    <ul>
+        {% for transition in transitions %}
+        <li><a href="/transition/{{ transition }}">{{ transition }}</a></li>
+        {% endfor %}
+    </ul>
+    <h2>Items</h2>
+    <ul>
+        {% for item in items %}
+        <li><a href="/transition/item/{{ item }}">{{ item }}</a></li>
+        {% endfor %}
+    </ul>
 </body>
 
 </html>

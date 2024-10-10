@@ -9,7 +9,7 @@ use strum::IntoEnumIterator;
 
 #[derive(Template)]
 #[template(path = "mario.html")]
-struct MarioTemplate<'a> {
+struct HtmlTemplate<'a> {
     marioname: &'a str,
     transitions: Vec<String>,
     items: Vec<String>,
@@ -28,34 +28,41 @@ impl Server {
 
     fn open(&mut self, ip: &str, port: i16) -> Result<(), io::Error> {
         let address = format!("{ip}:{port}");
-        let listener = TcpListener::bind(address)?;
+        let listener = TcpListener::bind(&address)?;
+        println!("Serving on {}.", address);
 
         for stream in listener.incoming() {
             let stream = stream.unwrap();
-            //stream.set_read_timeout(None);
 
-            match self.handle_connection(stream) {
-                Ok(()) => {},
-                Err(e) => println!("{e}")
+            if let Err(e) = self.handle_connection(stream) {
+                println!("{e}");
             }
         }
         Ok(())
     }
 
     fn handle_connection(&mut self, mut stream: TcpStream) -> Result<(), String> {
+        // Get the http request
         let buf_reader = BufReader::new(&mut stream);
         let request_line = match buf_reader.lines().next() {
             Some(r) => r.expect("Invalid request string"),
-            None => return Err(String::from("Request was empty..."))
+            None => return Err(String::from("Request was empty...")),
         };
 
+        // Parse the request to change mario's state
         if let Some(tran) = Self::request_to_transition(request_line) {
             println!("Executing transition {:?}", tran);
             self.mario = transition(&self.mario, tran);
         }
 
-        let html = MarioTemplate {
-            marioname: &format!("{}", self.mario),
+        // Return new HTML with the updated state.
+        let name_phrase = match self.mario {
+            State::Alive(_) => &format!("It's a me, {}", self.mario),
+            State::Dead => "Me's a Dead",
+        };
+
+        let html = HtmlTemplate {
+            marioname: name_phrase,
             items: Item::iter().map(|x| x.to_string()).collect(),
             transitions: Transition::iter().map(|x| x.to_string()).collect(),
         };
