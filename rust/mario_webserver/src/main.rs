@@ -83,16 +83,12 @@ impl Server {
         }
 
         let mut uri = request.next()?.split("/").filter(|x| x != &"");
-        let start = uri.next()?;
-        if start != "transition" {
-            return None;
-        }
         match uri.next() {
             Some("item") => Some(Transition::GetItem(
                 Item::from_str(uri.next().expect("/item must be followed by an item type"))
                     .unwrap(),
             )),
-            Some(t) => Some(Transition::from_str(t).expect("Invalid transition")),
+            Some(t) => Some(Transition::from_str(t).ok()?),
             None => None,
         }
     }

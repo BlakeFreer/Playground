@@ -14,7 +14,7 @@ I will combine this example with the [web server tutorial](https://doc.rust-lang
 
 ## Example
 
-The server boots to the Mario state. If the user requests `/mushroom` then the state will transition to Super Mario, and so on for the other states `/mushroom` then the state will transition to Super Mario, and so on for the other states.
+The server boots to the Mario state. If the user requests `/item/Mushroom` then the state will transition to Super Mario, and so on for the other states.
 
 I will add two additional transitions: `/damage` which will send `Fire/Cape -> Super -> Mario -> Dead` and `/revive` to go from `Dead -> Mario`. I will also add another item called `Snowflake` and corresponding powerup `IceMario` which will behave similarly to the other powerups.
 

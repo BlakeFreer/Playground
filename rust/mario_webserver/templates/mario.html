@@ -11,13 +11,13 @@
     <h2>Transitions</h2>
     <ul>
         {% for transition in transitions %}
-        <li><a href="/transition/{{ transition }}">{{ transition }}</a></li>
+        <li><a href="/{{ transition }}">{{ transition }}</a></li>
         {% endfor %}
     </ul>
     <h2>Items</h2>
     <ul>
         {% for item in items %}
-        <li><a href="/transition/item/{{ item }}">{{ item }}</a></li>
+        <li><a href="/item/{{ item }}">{{ item }}</a></li>
         {% endfor %}
     </ul>
 </body>
