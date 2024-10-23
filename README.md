@@ -1,6 +1,6 @@
-# General Code
+# Playground
 
-This is a collection of projects that I don't want to dedicate a whole project too.
+This repo is dedicated to small, exploratory projects that I don't want to dedicate a whole project too.
 
 ## Notable Projects
 
