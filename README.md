@@ -12,3 +12,4 @@ This repo is dedicated to small, exploratory projects that I don't want to dedic
 ### C++
 
 - Virtual CAN Demo [cpp/vcan](cpp/vcan)
+- Errors with `std::expected` [cpp/std_expected](cpp/std_expected)
