@@ -13,26 +13,45 @@ typedef struct {
 
 enum class parse_error { WRONG_NUMBER, INVALID_FLOAT };
 
-/**
- * @brief Parse CLI args into a Config struct
- * @return std::expected<Config, parse_error>
- */
-auto parse(int argc, char* argv[]) -> std::expected<Config, parse_error> {
-    if (argc != 3) return std::unexpected(parse_error::WRONG_NUMBER);
+// Wrap std::stof to catch exceptions and return std::expected
+auto stof_exp(const std::string& str) -> std::expected<float, parse_error> {
     try {
-        return Config{
-            .a = std::stof(argv[1]),
-            .b = std::stof(argv[2]),
-        };
+        return std::stof(str);
     } catch (const std::invalid_argument& e) {
-        // Catch a thrown exception to return unexpected
+        return std::unexpected(parse_error::INVALID_FLOAT);
+    } catch (const std::out_of_range& e) {
         return std::unexpected(parse_error::INVALID_FLOAT);
     }
 }
 
 /**
+ * @brief Parse CLI args into a Config struct
+ */
+auto parse(int argc, char* argv[]) -> std::expected<Config, parse_error> {
+    if (argc != 2 + 1) return std::unexpected(parse_error::WRONG_NUMBER);
+
+    /* If C++ had Rust's ? operator, the rest of this function could be
+     * replaced by:
+
+    return Config{
+        stof_exp(argv[1])?,
+        stof_exp(argv[2])?,
+    };
+    */
+
+    auto a = stof_exp(argv[1]);
+    if (!a) return std::unexpected(a.error());
+    auto b = stof_exp(argv[2]);
+    if (!b) return std::unexpected(b.error());
+
+    return Config{
+        a.value(),
+        b.value(),
+    };
+}
+
+/**
  * @brief Divide two floats. Return NULLOPT if divisor is 0.
- * @return std::optional<float>
  */
 auto divide(float a, float b) -> std::optional<float> {
     if (b == 0) return std::nullopt;
@@ -63,7 +82,7 @@ int main(int argc, char* argv[]) {
 
     /*
      * The following results are logically equivalent but demonstrate different
-     * ways of processing the optional value
+     * ways of processing an optional value
      */
 
     // check val.has_value() -> most direct, most verbose

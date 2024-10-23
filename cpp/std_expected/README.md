@@ -19,14 +19,14 @@ This error handling method is rough equivalent to
 ```c++
 Config parse(int argc, char* argv[]) {
     if(argc != 3) throw ParseErrorWrongNumber();
+    float a, b;
     try {
-        Config {
-            std::stof(argv[1]),
-            std::stof(argv[2]),
-        }
+        a = std::stof(argv[1]);
+        b = std::stof(argv[2]),
     } catch (const std::invalid_argument& e) {
         throw ParseErrorInvalidArgument();
     }
+    return Config{a, b};
 }
 
 int main(int argc, char* argv[]){
@@ -37,20 +37,6 @@ int main(int argc, char* argv[]){
     } catch (const ParseErrorInvalidFloat& e){
         // handle invalid arg
     }
-}
-```
-
-In `parse()`, I had to wrap most of the logic in a `try-catch` block since `std::stof` can _throw_ an exception. This block would not be necessary the function returned `std::expected`, though we would need different ways to halt execution since C++ does not have anything akin to Rust's `?` operator which short-circuits on error. In this sense, the thrown exception model is nice since it doesn't clutter the `Config{}` construction.
-
-```c++
-// Potential parse() if std::stof returned std::expected<float, E>
-auto parse(int argc, char* argv[]) -> std::expected<Config, parse_error> {
-    if (argc != 3) return std::unexpected(parse_error::WRONG_NUMBER);
-    float a, b;
-    if(!(a = std::stof_exp(argv[1]))) return std::unexpected<parse_error::INVALID_FLOAT>;
-    if(!(b = std::stof_exp(argv[2]))) return std::unexpected<parse_error::INVALID_FLOAT>;
-
-    return Config{a, b};
 }
 ```
 
