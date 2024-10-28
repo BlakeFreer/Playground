@@ -1,0 +1,2 @@
+CompileFlags:
+  Add: [--target=x86_64-w64-mingw64,-Wno-deprecated-volatile,--std=c++20]
