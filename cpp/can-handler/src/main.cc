@@ -22,17 +22,17 @@ void print_contactor_state(const can::ContactorStateMsg& msg) {
 }
 
 int main() {
-    auto base = StmCAN{};
-    auto veh_bus = can::VehBus{base};
+    StmCAN base{};  // this would usually go in bindings
+    can::VehBus veh_bus{base};
 
-    auto msg1 = can::PackStateMsg{
+    can::PackStateMsg msg1{
         .pack_current = 1.0,
         .pack_inst_voltage = 2.0,
         .avg_cell_voltage = 3.0,
         .populated_cells = 4,
     };
 
-    auto msg2 = can::ContactorStateMsg{
+    can::ContactorStateMsg msg2{
         .pack_positive = 1,
         .pack_precharge = 0,
         .pack_negative = 1,

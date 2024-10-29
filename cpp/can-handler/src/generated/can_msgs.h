@@ -16,14 +16,14 @@ struct PackStateMsg {
     float avg_cell_voltage;
     uint8_t populated_cells;
 
-    static constexpr auto id() -> uint32_t {
+    static constexpr uint32_t id() {
         return 0x100;
     }
-    static constexpr auto data_length() -> uint8_t {
+    static constexpr uint8_t data_length() {
         return 7;
     }
 
-    auto encode() const -> RawMessage {
+    RawMessage encode() const {
         // placeholder
         uint8_t data[7] = {0x01, 0xA2, 0xB3, 0xC4, 0xD5, 0xE6, 0xF7};
         return RawMessage::New(PackStateMsg::id(), PackStateMsg::data_length(),
@@ -34,7 +34,7 @@ struct PackStateMsg {
      * Notice this is static so it does not have side effects on any instance.
      * This means it can safely be public since you can't do harm with it.
      */
-    static auto decode(const RawMessage& msg) -> PackStateMsg {
+    static PackStateMsg decode(const RawMessage& msg) {
         // placeholder
         return PackStateMsg{
             .pack_current = (float)msg.data[0],
@@ -50,22 +50,22 @@ struct ContactorStateMsg {
     uint8_t pack_precharge;
     uint8_t pack_negative;
 
-    static constexpr auto id() -> uint32_t {
+    static constexpr uint32_t id() {
         return 0x200;
     }
 
-    static constexpr auto data_length() -> uint8_t {
+    static constexpr uint8_t data_length() {
         return 3;
     }
 
-    auto encode() const -> RawMessage {
+    RawMessage encode() const {
         // placeholder
         uint8_t data[3] = {pack_positive, pack_precharge, pack_negative};
         return RawMessage::New(ContactorStateMsg::id(),
                                ContactorStateMsg::data_length(), data);
     }
 
-    static auto decode(const RawMessage& msg) -> ContactorStateMsg {
+    static ContactorStateMsg decode(const RawMessage& msg) {
         // placeholder
         return ContactorStateMsg{
             .pack_positive = msg.data[0],
