@@ -11,7 +11,7 @@
 class StmCAN : public can::Base {
    public:
     void Send(const can::RawMessage& msg) override {
-        std::cout << std::format("Sending message: {}", msg) << std::endl;
+        std::cout << std::format("STM | Sending message: {}", msg) << std::endl;
     }
 };
 
@@ -23,8 +23,7 @@ void print_contactor_state(const can::ContactorStateMsg& msg) {
 
 int main() {
     auto base = StmCAN{};
-
-    auto bus = can::VehBus{base};
+    auto veh_bus = can::VehBus{base};
 
     auto msg1 = can::PackStateMsg{
         .pack_current = 1.0,
@@ -39,22 +38,23 @@ int main() {
         .pack_negative = 1,
     };
 
-    bus.Send(msg1.encode());
-    bus.Send(msg2.encode());
+    veh_bus.Send(msg1.encode());
+    veh_bus.Send(msg2.encode());
 
     // Nothing received yet -> should print No Value
-    auto latest = bus.GetLatest<can::ContactorStateMsg>();
+    auto latest = veh_bus.GetLatest<can::ContactorStateMsg>();
     if (latest.has_value()) {
         auto msg = latest.value();  // unpack the optional
         print_contactor_state(msg);
     } else {
         std::cout << "No value" << std::endl;
     }
+
     // This would usually be called in the CAN interrupt.
     base.Receive(can::ContactorStateMsg{10, 5, 19}.encode());
 
-    // Now there should be a value
-    latest = bus.GetLatest<can::ContactorStateMsg>();
+    // Now there should be a value -> we don't even need to call update
+    latest = veh_bus.GetLatest<can::ContactorStateMsg>();
     if (latest.has_value()) {
         auto msg = latest.value();  // unpack the optional
         print_contactor_state(msg);
