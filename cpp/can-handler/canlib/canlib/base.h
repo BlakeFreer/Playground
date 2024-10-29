@@ -1,7 +1,12 @@
+/**
+ * Near identical to the current CanBase class.
+ */
+
 #pragma once
 
 #include <iostream>
 
+#include "bus.h"
 #include "format.h"
 #include "msg.h"
 
@@ -11,17 +16,15 @@ class Bus;
 
 class Base {
    public:
-    void send(const RawMessage& msg) {
-        std::cout << std::format("Sending message: {}", msg) << std::endl;
-    }
+    virtual void Send(const RawMessage& msg) = 0;
+    void Receive(RawMessage msg);
 
    private:
-    void register_bus(Bus* bus) {
-        bus_ = bus;
-    }
+    void RegisterBus(Bus* bus);
 
    private:
     Bus* bus_;
+
     friend class Bus;
 };
 
