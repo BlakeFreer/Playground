@@ -1,32 +1,32 @@
 #include <format>
 #include <iostream>
 
-#include "can-messages.h"
-#include "canlib/mailbox.h"
+#include "canlib/base.h"
+#include "canlib/bus.h"
+#include "canlib/format.h"
 #include "canlib/msg.h"
+#include "gen_can.h"
 
 int main() {
-    auto m1 = can::CanMsg<can::msg::PackState>{};
+    auto base = can::Base{};
 
-    auto raw = m1.Pack();
-    std::cout << std::format("{}", raw) << std::endl;
+    auto bus = can::VehBus{base};
 
-    auto m2 = can::CanMsg<can::msg::PackState>::Unpack(raw);
+    auto msg1 = can::PackState{
+        .pack_current = 1.0,
+        .pack_inst_voltage = 2.0,
+        .avg_cell_voltage = 3.0,
+        .populated_cells = 4,
+    };
 
-    auto mb = can::MsgQueue<3, can::QueueDirection::FIFO>{};
-    auto mb2 = can::MsgQueue<3, can::QueueDirection::LIFO>{};
+    auto msg2 = can::ContactorState{
+        .pack_positive = 1,
+        .pack_precharge = 0,
+        .pack_negative = 1,
+    };
 
-    mb.push(raw);
-    mb2.push(raw);
-
-    const auto m_ = mb.peek();
-    if (m_.has_value()) {
-        auto m = m_.value().get();
-        m.id = 10;
-        std::cout << std::format("{}", m) << std::endl;
-    }
-
-    std::cout << std::format("{}", raw) << std::endl;
-
+    bus.Send(msg1);
+    bus.Send(msg2);
+    bus.GetLatest<can::PackState>();
     return 0;
 }
