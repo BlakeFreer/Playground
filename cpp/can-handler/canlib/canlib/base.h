@@ -6,7 +6,6 @@
 
 #include <iostream>
 
-#include "bus.h"
 #include "format.h"
 #include "msg.h"
 
@@ -23,6 +22,8 @@ class Base {
     void RegisterBus(Bus* bus);
 
    private:
+    virtual uint32_t GetTimestamp() = 0;
+
     Bus* bus_;
 
     friend class Bus;

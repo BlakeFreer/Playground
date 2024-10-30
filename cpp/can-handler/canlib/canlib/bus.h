@@ -11,16 +11,15 @@
 
 namespace can {
 
-class Base;
-
 class Bus {
    public:
     Bus(Base& can_base);
 
     /**
-     * Send a message. Use `.encode()` on a message to get a RawMessage.
+     * Send a message.
      */
-    void Send(RawMessage msg);
+    template <Message T>
+    void Send(T msg);
 
    private:
     Base& can_base_;
@@ -29,8 +28,17 @@ class Bus {
      * Given a RawMessage, decode it based on its ID and store in this
      * bus.
      */
-    virtual void AddMessage(const RawMessage& msg) = 0;
+    virtual void AddMessage(const RawMessage& msg, uint32_t timestamp) = 0;
     friend class Base;
 };
+
+/**
+ * @brief Relay the message to the base.
+ * @note This is a template method so it must be defined in the header.
+ */
+template <Message T>
+void Bus::Send(T msg) {
+    can_base_.Send(msg.encode());
+}
 
 }  // namespace can
