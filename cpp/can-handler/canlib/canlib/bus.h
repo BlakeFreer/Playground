@@ -12,16 +12,16 @@
 namespace can {
 
 class Bus {
-   public:
+public:
     Bus(Base& can_base);
 
     /**
      * Send a message.
      */
-    template <Message T>
+    template <TxMessage T>
     void Send(T msg);
 
-   private:
+private:
     Base& can_base_;
 
     /**
@@ -36,7 +36,7 @@ class Bus {
  * @brief Relay the message to the base.
  * @note This is a template method so it must be defined in the header.
  */
-template <Message T>
+template <TxMessage T>
 void Bus::Send(T msg) {
     can_base_.Send(msg.encode());
 }
