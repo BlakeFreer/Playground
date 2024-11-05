@@ -8,5 +8,5 @@
 	path = cpp/can-handler/etl
 	url = https://github.com/ETLCPP/etl.git
 [submodule "cpp/control/third-party/eigen"]
-	path = cpp/control/third-party/eigen
+	path = cpp/control/ctrl/third-party/eigen
 	url = https://gitlab.com/libeigen/eigen.git

@@ -1,3 +1,6 @@
-add_library(ctrl)
+add_library(ctrl STATIC)
 
-target_include_directories()
+add_subdirectory(lls)
+
+add_subdirectory(third-party/eigen)
+target_link_libraries(ctrl PUBLIC Eigen3::Eigen)
