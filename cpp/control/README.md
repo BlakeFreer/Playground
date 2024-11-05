@@ -4,7 +4,7 @@ Implementing concepts from MECHTRON 4AX3 - Predictive and Intelligent Control.
 
 ## Roadmap
 
-- Linear Least Squares via Normal Equation
+- ~~Linear Least Squares via Normal Equation~~
 - Gradient Descent solver
 - State space classes & solving methods
 - Kalman Filter

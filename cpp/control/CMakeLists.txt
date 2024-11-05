@@ -10,9 +10,7 @@ set(CMAKE_USE_RESPONSE_FILE_FOR_INCLUDES OFF)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -Wunused")
 set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
 
-project(main)
-
-add_executable(main main.cpp)
+project(control)
 
 add_subdirectory(ctrl)
-target_link_libraries(main ctrl)
+add_subdirectory(examples)
