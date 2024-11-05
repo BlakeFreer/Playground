@@ -1,1 +1,3 @@
-target_sources(ctrl PRIVATE lls.cpp)
+file(GLOB CPP_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
+
+target_sources(ctrl PRIVATE ${CPP_SRC})

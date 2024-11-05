@@ -4,13 +4,13 @@
 
 namespace ctrl::lls {
 
-template <int N>
-auto Solve(std::function<Eigen::RowVector<double, N>(float)> create_row,
-           Eigen::VectorXd x, Eigen::VectorXd y)
-    -> Eigen::Matrix<double, N, 1> {
+auto Solve(std::function<Eigen::RowVectorXd(float)> create_row,
+           const Eigen::VectorXd& x, const Eigen::VectorXd& y)
+    -> Eigen::VectorXd {
     // Construct A matrix
     int n_rows = x.rows();
-    Eigen::MatrixXd A(n_rows, N);
+    int n_param = create_row(0).cols();
+    Eigen::MatrixXd A(n_rows, n_param);
 
     for (int i = 0; i < n_rows; i++) {
         A.row(i) = create_row(x(i));

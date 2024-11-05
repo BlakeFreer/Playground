@@ -10,7 +10,7 @@ int main() {
     x << 1, 2, 3, 4;
     y << 1, 11, 21, 32;
 
-    auto solution = ctrl::lls::Solve<2>(
+    auto solution = ctrl::lls::Solve(
         [](float _x) { return Eigen::RowVector2d{_x, 1}; }, x, y);
 
     std::cout << solution << std::endl;
