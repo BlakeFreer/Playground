@@ -1,17 +1,20 @@
-# Control
+# Examples
 
-Implementing concepts from MECHTRON 4AX3 - Predictive and Intelligent Control.
+## LTI
 
-## Roadmap
+Simulates a car accelerating and coasting with drag.
 
-- ~~Linear Least Squares via Normal Equation~~
-- ~~Gradient Descent solver~~
-- State space classes & solving methods
-- Kalman Filter
-- Luenberger Observer
-- Extended Kalman filter
-  - Is this code any different than the standard KF?
-- Control
-  - Converging to optimal policy
-  - Learning
-  - Exploration
+```bash
+make examples/lti.cpp
+```
+
+**Usage:** `./lti <drag> <timestep>`. Pipe the output to a file called `lti.out` then run `gnuplot`.
+
+### Example
+
+```bash
+./build/examples/lti.exe 0.6 0.1 > lti.out
+gnuplot examples/lti.plot
+```
+
+![LTI Example](img/lti.png)

@@ -1,5 +1,7 @@
 /// Simple LLS solver with gradient descent.
 
+#include <stdlib.h>
+
 #include <format>
 #include <iostream>
 #include <random>

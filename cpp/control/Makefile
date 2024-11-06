@@ -1,13 +1,16 @@
 BUILD := build
 
-.PHONY: build config clean
+.PHONY: all config clean
 
-build: config
+all: config
 	cmake --build build
+
+examples/%.cpp: config
+	cmake --build build --target $*
 
 config:
 	mkdir -p $(BUILD)
-	cmake -B$(BUILD) -S . -G"Unix Makefiles"
+	cmake -B$(BUILD) -S . -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
 
 clean:
 	rm -rf $(BUILD)
