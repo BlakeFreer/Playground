@@ -10,7 +10,7 @@ examples/%.cpp: config
 
 config:
 	mkdir -p $(BUILD)
-	cmake -B$(BUILD) -S . -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
+	cmake -B$(BUILD) -S . -G"Unix Makefiles"
 
 clean:
 	rm -rf $(BUILD)

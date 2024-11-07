@@ -5,12 +5,24 @@ namespace ctrl {
 
 LTISystem::LTISystem(Eigen::MatrixXd A, Eigen::MatrixXd B, Eigen::MatrixXd C)
     : A_(A), B_(B), C_(C) {
-    int n = A.rows();
-    assert(A.cols() == n);
-    assert(B.rows() == n);
-    assert(C.cols() == n);
-    X_ = Eigen::VectorXd(n);
+    int nx = GetStateSize();
+    assert(A.rows() == nx);
+    assert(A.cols() == nx);
+    assert(B.rows() == nx);
+    assert(C.cols() == nx);
+
+    int ny = GetOutputSize();
+    assert(C.rows() == ny);
+
+    X_ = Eigen::VectorXd(nx);
     X_.setZero();
+}
+
+int LTISystem::GetStateSize() const {
+    return A_.rows();
+}
+int LTISystem::GetOutputSize() const {
+    return C_.rows();
 }
 
 void LTISystem::Initialize(Eigen::VectorXd x) {

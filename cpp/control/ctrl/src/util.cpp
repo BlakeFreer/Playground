@@ -1,3 +1,5 @@
+#include <random>
+
 #include "Eigen/Dense"
 #include "ctrl/util.hpp"
 
@@ -19,6 +21,12 @@ Eigen::VectorXd linspace(double start, double stop, int num_points,
     }
 
     return x;
+}
+
+Eigen::MatrixXd random_from_variance(const Eigen::MatrixXd& variance) {
+    static std::random_device generator;
+    static std::normal_distribution<double> d(0, 1);
+    return variance.unaryExpr([](double v) { return sqrt(v) * d(generator); });
 }
 
 }  // namespace ctrl

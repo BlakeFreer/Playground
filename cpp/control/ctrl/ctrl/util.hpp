@@ -14,4 +14,11 @@ namespace ctrl {
 Eigen::VectorXd linspace(double start, double stop, int num_points,
                          bool endpoint);
 
+/// @brief Generate a random matrix from a variance matrix.
+/// A variance matrix is a diagonal matrix with the variance of each entry.
+///
+/// @param variance
+/// @return Eigen::MatrixXd
+Eigen::MatrixXd random_from_variance(const Eigen::MatrixXd& variance);
+
 }  // namespace ctrl
