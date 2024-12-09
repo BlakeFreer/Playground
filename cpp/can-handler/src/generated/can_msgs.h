@@ -46,6 +46,10 @@ private:
     static RxPackState decode(const RawMessage& msg, uint32_t timestamp) {
         // using a static method instead of a constructor allows us to perform
         // logic then construct const fields.
+        // EDIT: We should not use const fields as you can't move a new message
+        // into an existing memory cell as that would break the `const`
+        // guarantee. This decode can be moved to a private constructor which
+        // only `VehBus` can access.
         float pack_current_ = (float)msg.data[0];
         float pack_inst_voltage_ = (float)msg.data[1];
         float avg_cell_voltage_ = (float)msg.data[2];
