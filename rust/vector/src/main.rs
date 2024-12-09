@@ -5,12 +5,15 @@ fn main() {
     let v2 = Vector3::constant(3.0);
     let v3 = Vector::new([1.2, 3.4]);
 
-    let _v4 = v + v2;
+    let mut _v4 = v + v2;
+    _v4 -= v2;
 
     println!("{}, {:.3}", v, v.mag());
     println!("{}, {:.3}", v2, v2.mag());
     println!("{}, {:.3}", v3, v3.mag());
-    println!("Dot is {:.3}", Vector::dot(v, v2));
+    println!("Dot is {:.3}", v.dot(v2));
+
+    v.dot(v2);
 
     println!("{}", Vector::<4>::new([1.00, 3.0, 4.0, 5.0]));
 }
