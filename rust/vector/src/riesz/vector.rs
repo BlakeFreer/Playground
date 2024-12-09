@@ -1,5 +1,6 @@
 use std::{cmp::PartialEq, convert::TryFrom, fmt, iter::zip, ops};
 
+pub mod dim3;
 pub mod math;
 
 #[derive(Debug, Clone, Copy)]
