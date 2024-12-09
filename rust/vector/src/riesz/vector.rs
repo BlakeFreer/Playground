@@ -4,11 +4,11 @@ pub mod dim3;
 pub mod math;
 
 #[derive(Debug, Clone, Copy)]
-pub struct Vector<const N: usize> {
+pub struct Matrix<const N: usize> {
     data: [f64; N],
 }
 
-impl<const N: usize> Vector<N> {
+impl<const N: usize> Matrix<N> {
     // ------ Constructors ------
     pub fn zero() -> Self {
         Self { data: [0.0; N] }
@@ -26,25 +26,25 @@ impl<const N: usize> Vector<N> {
     }
 }
 
-impl<const N: usize> PartialEq for Vector<N> {
+impl<const N: usize> PartialEq for Matrix<N> {
     fn eq(&self, other: &Self) -> bool {
         zip(self.data, other.data).all(|(x, y)| x == y)
     }
 }
 
-impl<const N: usize> ops::Index<usize> for Vector<N> {
+impl<const N: usize> ops::Index<usize> for Matrix<N> {
     type Output = f64;
     fn index(&self, index: usize) -> &f64 {
         &self.data[index]
     }
 }
-impl<const N: usize> ops::IndexMut<usize> for Vector<N> {
+impl<const N: usize> ops::IndexMut<usize> for Matrix<N> {
     fn index_mut<'a>(&'a mut self, index: usize) -> &'a mut f64 {
         &mut self.data[index]
     }
 }
 
-impl<const N: usize> fmt::Display for Vector<N> {
+impl<const N: usize> fmt::Display for Matrix<N> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let decimals = f.precision().unwrap_or(2);
         write!(f, "(")?;
@@ -59,7 +59,7 @@ impl<const N: usize> fmt::Display for Vector<N> {
     }
 }
 
-impl<const N: usize> TryFrom<Vec<f64>> for Vector<N> {
+impl<const N: usize> TryFrom<Vec<f64>> for Matrix<N> {
     type Error = &'static str;
 
     fn try_from(vec: Vec<f64>) -> Result<Self, Self::Error> {

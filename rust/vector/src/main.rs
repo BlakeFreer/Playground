@@ -1,9 +1,9 @@
-use riesz::{Vector, Vector3};
+use riesz::{Matrix, Vector3};
 
 fn main() {
-    let v = Vector::try_from(vec![1.0, 2.0, 3.0]).unwrap();
+    let v = Matrix::try_from(vec![1.0, 2.0, 3.0]).unwrap();
     let v2 = Vector3::constant(3.0);
-    let v3 = Vector::new([1.2, 3.4]);
+    let v3 = Matrix::new([1.2, 3.4]);
 
     let mut _v4 = v + v2;
     _v4 -= v2;
@@ -15,5 +15,5 @@ fn main() {
 
     v.dot(v2);
 
-    println!("{}", Vector::<4>::new([1.00, 3.0, 4.0, 5.0]));
+    println!("{}", Matrix::<4>::new([1.00, 3.0, 4.0, 5.0]));
 }

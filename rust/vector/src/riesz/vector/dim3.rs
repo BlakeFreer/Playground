@@ -1,7 +1,7 @@
-use crate::Vector;
+use crate::Matrix;
 
 /// Specialized 3D vector
-pub type Vector3 = Vector<3>;
+pub type Vector3 = Matrix<3>;
 impl Vector3 {
     /// Get the `x` coordinate.
     /// ```
