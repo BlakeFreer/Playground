@@ -9,11 +9,11 @@ use crate::Matrix;
 /// let v2 = Vector::<3>::constant(100.0);
 /// assert_eq!(v1 + v2, Vector::new([101.0, 102.0, 103.0]));
 /// ```
-impl<const N: usize> ops::Add for Matrix<N> {
-    type Output = Matrix<N>;
+impl<const R: usize, const C: usize> ops::Add for Matrix<R, C> {
+    type Output = Matrix<R, C>;
     fn add(self, other: Self) -> Self::Output {
         Self::Output {
-            data: std::array::from_fn(|i| self[i] + other[i]),
+            data: std::array::from_fn(|r| std::array::from_fn(|c| self[(r, c)] + other[(r, c)])),
         }
     }
 }
@@ -24,10 +24,13 @@ impl<const N: usize> ops::Add for Matrix<N> {
 /// let mut v1 = Vector::new([1.0, 2.0, 3.0]);
 /// v1 += Vector::<3>::constant(100.0);
 /// assert_eq!(v1, Vector::new([101.0, 102.0, 103.0]));
-impl<const N: usize> ops::AddAssign for Matrix<N> {
+/// ```
+impl<const R: usize, const C: usize> ops::AddAssign for Matrix<R, C> {
     fn add_assign(&mut self, rhs: Self) {
-        for (x, y) in self.data.iter_mut().zip(rhs.data.iter()) {
-            *x += y;
+        for (r, c) in self.data.iter_mut().zip(rhs.data.iter()) {
+            for (x, y) in r.iter_mut().zip(c.iter()) {
+                *x += y;
+            }
         }
     }
 }
@@ -39,18 +42,18 @@ impl<const N: usize> ops::AddAssign for Matrix<N> {
 /// assert_eq!(v * 5.0, Vector::new([5.0, 10.0, 15.0]));
 /// assert_eq!(5.0 * v, Vector::new([5.0, 10.0, 15.0]));
 /// ```
-impl<const N: usize> ops::Mul<f64> for Matrix<N> {
-    type Output = Matrix<N>;
+impl<const R: usize, const C: usize> ops::Mul<f64> for Matrix<R, C> {
+    type Output = Matrix<R, C>;
     fn mul(self, scalar: f64) -> Self::Output {
         Self::Output {
-            data: self.data.map(|x| x * scalar),
+            data: self.data.map(|r| r.map(|x| x * scalar)),
         }
     }
 }
 
-impl<const N: usize> ops::Mul<Matrix<N>> for f64 {
-    type Output = Matrix<N>;
-    fn mul(self, v: Matrix<N>) -> Self::Output {
+impl<const R: usize, const C: usize> ops::Mul<Matrix<R, C>> for f64 {
+    type Output = Matrix<R, C>;
+    fn mul(self, v: Matrix<R, C>) -> Self::Output {
         v * self
     }
 }
@@ -62,10 +65,12 @@ impl<const N: usize> ops::Mul<Matrix<N>> for f64 {
 /// v *= 5.0;
 /// assert_eq!(v, Vector::new([5.0, 10.0, 15.0]));
 /// ```
-impl<const N: usize> ops::MulAssign<f64> for Matrix<N> {
+impl<const R: usize, const C: usize> ops::MulAssign<f64> for Matrix<R, C> {
     fn mul_assign(&mut self, scalar: f64) {
-        for x in self.data.iter_mut() {
-            *x *= scalar;
+        for r in self.data.iter_mut() {
+            for x in r.iter_mut() {
+                *x *= scalar;
+            }
         }
     }
 }
@@ -76,8 +81,8 @@ impl<const N: usize> ops::MulAssign<f64> for Matrix<N> {
 /// let v = Vector::new([1.0, 2.0, 3.0, 4.0, 5.0]);
 /// assert_eq!(v / 2.0, Vector::new([0.5, 1.0, 1.5, 2.0, 2.5]));
 /// ```
-impl<const N: usize> ops::Div<f64> for Matrix<N> {
-    type Output = Matrix<N>;
+impl<const R: usize, const C: usize> ops::Div<f64> for Matrix<R, C> {
+    type Output = Matrix<R, C>;
     fn div(self, rhs: f64) -> Self::Output {
         self * (1.0 / rhs)
     }
@@ -90,7 +95,7 @@ impl<const N: usize> ops::Div<f64> for Matrix<N> {
 /// v /= 2.0;
 /// assert_eq!(v, Vector::new([0.5, 1.0, 1.5, 2.0, 2.5]));
 /// ```
-impl<const N: usize> ops::DivAssign<f64> for Matrix<N> {
+impl<const R: usize, const C: usize> ops::DivAssign<f64> for Matrix<R, C> {
     fn div_assign(&mut self, scalar: f64) {
         *self *= 1.0 / scalar
     }
@@ -101,8 +106,8 @@ impl<const N: usize> ops::DivAssign<f64> for Matrix<N> {
 /// # use riesz::Vector;
 /// assert_eq!(-Vector::new([1.0, 2.0]), Vector::new([-1.0, -2.0]));
 /// ```
-impl<const N: usize> ops::Neg for Matrix<N> {
-    type Output = Matrix<N>;
+impl<const R: usize, const C: usize> ops::Neg for Matrix<R, C> {
+    type Output = Matrix<R, C>;
     fn neg(self) -> Self::Output {
         -1.0 * self
     }
@@ -115,8 +120,8 @@ impl<const N: usize> ops::Neg for Matrix<N> {
 /// let v2 = Vector::new([20.0, -5.0, 3.0]);
 /// assert_eq!(v1 - v2, Vector::new([-10.0, 10.0, -3.0]));
 /// ```
-impl<const N: usize> ops::Sub for Matrix<N> {
-    type Output = Matrix<N>;
+impl<const R: usize, const C: usize> ops::Sub for Matrix<R, C> {
+    type Output = Matrix<R, C>;
     fn sub(self, other: Self) -> Self::Output {
         self + -other
     }
@@ -129,34 +134,8 @@ impl<const N: usize> ops::Sub for Matrix<N> {
 /// v -= Vector::new([20.0, -5.0, 3.0]);
 /// assert_eq!(v, Vector::new([-10.0, 10.0, -3.0]));
 /// ```
-impl<const N: usize> ops::SubAssign for Matrix<N> {
+impl<const R: usize, const C: usize> ops::SubAssign for Matrix<R, C> {
     fn sub_assign(&mut self, rhs: Self) {
-        for (x, y) in self.data.iter_mut().zip(rhs.data.iter()) {
-            *x -= y;
-        }
-    }
-}
-
-impl<const N: usize> Matrix<N> {
-    /// Calculate the Euclidean magnitude of a vector.
-    /// ```
-    /// # use riesz::Vector;
-    /// let v = Vector::<2>::new([3.0, 4.0]);
-    /// assert_eq!(v.mag(), 5.0);
-    /// ```
-    pub fn mag(&self) -> f64 {
-        self.data.iter().map(|x| x.powi(2)).sum::<f64>().sqrt()
-    }
-
-    // ------ Methods ------
-    /// Take the product of two vectors.
-    /// ```
-    /// # use riesz::Vector;
-    /// let v1 = Vector::new([3.0, 4.5]);
-    /// let v2 = Vector::new([-8.0, 2.0]);
-    /// assert_eq!(v1.dot(v2), -15.0);
-    /// ```
-    pub fn dot(&self, v2: Self) -> f64 {
-        zip(self.data, v2.data).map(|(x, y)| x * y).sum()
+        *self += -rhs
     }
 }

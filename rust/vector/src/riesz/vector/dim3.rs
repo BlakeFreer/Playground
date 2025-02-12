@@ -2,6 +2,7 @@ use crate::Matrix;
 
 /// Specialized 3D vector
 pub type Vector3 = Matrix<3>;
+
 impl Vector3 {
     /// Get the `x` coordinate.
     /// ```
@@ -56,5 +57,29 @@ impl Vector3 {
             -v1.x() * v2.z() + v1.z() * v2.x(),
             v1.x() * v2.y() - v1.y() * v2.x(),
         ])
+    }
+}
+
+impl<const R: usize, const C: usize> Matrix<R, C> {
+    /// Calculate the Euclidean magnitude of a vector.
+    /// ```
+    /// # use riesz::Vector;
+    /// let v = Vector::<2>::new([3.0, 4.0]);
+    /// assert_eq!(v.mag(), 5.0);
+    /// ```
+    pub fn mag(&self) -> f64 {
+        self.data.iter().map(|x| x.powi(2)).sum::<f64>().sqrt()
+    }
+
+    // ------ Methods ------
+    /// Take the product of two vectors.
+    /// ```
+    /// # use riesz::Vector;
+    /// let v1 = Vector::new([3.0, 4.5]);
+    /// let v2 = Vector::new([-8.0, 2.0]);
+    /// assert_eq!(v1.dot(v2), -15.0);
+    /// ```
+    pub fn dot(&self, v2: Self) -> f64 {
+        zip(self.data, v2.data).map(|(x, y)| x * y).sum()
     }
 }
