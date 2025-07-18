@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+enum ECU {
+    NONE = 0;
+    FRONTCONTROLLER = 1;
+    LVCONTROLLER = 2;
+    TMS = 3;
+}
+
+message Command {
+    ECU ecu = 1;
+    uint32 data = 2;   
+}
