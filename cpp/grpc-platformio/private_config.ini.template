@@ -1,0 +1,6 @@
+; Use this file to tell PlatformIO where you installed gRPC
+;
+; Copy this file, remove the `.template` suffix, and edit the `custom_grpc_path` 
+
+[env]
+custom_grpc_path=~/.local/grpc ; edit as required
