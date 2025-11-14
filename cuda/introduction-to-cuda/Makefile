@@ -1,8 +1,8 @@
 .PHONY: all
-all: add add_cuda add_cuda_threads add_cuda_blocks add_cuda_prefetch
+all: add.out add_cuda.out add_cuda_threads.out add_cuda_blocks.out add_cuda_prefetch.out gpu_info.out
 
-add: add.cpp
+add.out: add.cpp
 	g++ $< -o $@
 
-%: %.cu
+%.out: %.cu
 	nvcc $< -o $@

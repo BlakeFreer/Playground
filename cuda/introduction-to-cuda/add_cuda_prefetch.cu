@@ -26,11 +26,6 @@ int main(void) {
         y[i] = 2.0f;
     }
 
-    // run the kernel on the GPU
-    int threads_per_block = 256;
-    int num_blocks = (n + threads_per_block - 1) / threads_per_block;
-    add<<<num_blocks, threads_per_block>>>(n, x, y);
-
     // prefetch the arrays into the GPU memory
     int device;
     cudaGetDevice(&device);
@@ -44,6 +39,11 @@ int main(void) {
     };
     cudaMemPrefetchAsync(x, n * sizeof(float), loc, 0);
     cudaMemPrefetchAsync(y, n * sizeof(float), loc, 0);
+
+    // run the kernel on the GPU
+    int threads_per_block = 256;
+    int num_blocks = (n + threads_per_block - 1) / threads_per_block;
+    add<<<num_blocks, threads_per_block>>>(n, x, y);
 
     // wait for it to finish
     cudaDeviceSynchronize();
