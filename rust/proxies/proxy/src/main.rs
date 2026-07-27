@@ -21,7 +21,7 @@ async fn main() -> anyhow::Result<()> {
 }
 
 async fn root() -> &'static str {
-    "Proxy"
+    "Hello from the proxy\n"
 }
 
 async fn post_result(Json(msg): Json<Message>) -> StatusCode {

@@ -1,9 +1,5 @@
 # Proxies
 
-Implement a proxy.
-
-## Servers
-
 Opens simple servers on 3 ports.
 
 ```bash
@@ -33,6 +29,9 @@ The proxy allows the client to send a Message without needing to know all of the
 
 ```bash
 # Client terminal
+> curl 0.0.0.0:4000
+Hello from the proxy
+
 > curl 0.0.0.0:4000/send --json '{"text": "Hello World"}'
 
 # Proxy terminal
