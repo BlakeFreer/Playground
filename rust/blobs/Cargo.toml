@@ -1,0 +1,10 @@
+[package]
+name = "blobs"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.104"
+aws-creds = "0.39.1"
+s3 = "0.1.36"
+tokio = { version = "1.53.1", features = ["full"] }
