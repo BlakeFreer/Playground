@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "tms.hpp"
+#include "tms-common/report_temperature.hpp"
 
 using namespace macfe::tms::priv;
 

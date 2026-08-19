@@ -3,7 +3,7 @@
 #include "abstraction.hpp"
 #include "stm32/analog_input.hpp"
 #include "stm32/can.hpp"
-#include "tms.hpp"
+#include "tms-common/report_temperature.hpp"
 
 // CubeMX
 #include "adc.h"
