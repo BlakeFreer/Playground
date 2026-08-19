@@ -2,11 +2,11 @@
 
 #include <queue>
 
-#include "abstraction.hpp"
+#include "periph.hpp"
 
 namespace macfe::sil {
 
-class Can : public abstraction::Can {
+class Can : public periph::Can {
 public:
     Can() : messages_(std::queue<CanMessage>()) {}
 

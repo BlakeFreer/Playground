@@ -1,10 +1,10 @@
 #pragma once
 
-#include "abstraction.hpp"
+#include "periph.hpp"
 
 namespace macfe::sil {
 
-class AnalogInput : public abstraction::AnalogInput {
+class AnalogInput : public periph::AnalogInput {
 public:
     AnalogInput() : voltage_(0.0f) {}
 

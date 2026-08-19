@@ -13,7 +13,7 @@ public:
 
 }  // namespace macfe
 
-namespace macfe::abstraction {
+namespace macfe::periph {
 
 class AnalogInput {
 public:
@@ -25,4 +25,4 @@ public:
     virtual void Send(const CanMessage& msg) = 0;
 };
 
-}  // namespace macfe::abstraction
+}  // namespace macfe::periph

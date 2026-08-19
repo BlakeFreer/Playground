@@ -13,7 +13,7 @@
 
 #include <cstdint>
 
-#include "abstraction.hpp"
+#include "periph.hpp"
 
 #ifdef USE_FREERTOS
 #include "FreeRTOS.h"
@@ -23,11 +23,11 @@
 
 namespace macfe::stm32f {
 
-class CanBase : public macfe::abstraction::Can {
+class CanBase : public macfe::periph::Can {
 public:
     CanBase(CAN_HandleTypeDef* hcan);
 
-    void Send(const abstraction::CanMessage& can_tx_msg) override;
+    void Send(const CanMessage& can_tx_msg) override;
 };
 
 }  // namespace macfe::stm32f

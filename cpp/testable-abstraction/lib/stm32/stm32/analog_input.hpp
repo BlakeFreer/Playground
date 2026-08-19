@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include "abstraction.hpp"
+#include "periph.hpp"
 
 #ifdef STM32F7
 #include "stm32f7xx_hal.h"
@@ -17,7 +17,7 @@
 
 namespace macfe::stm32f {
 
-class AnalogInput : public macfe::abstraction::AnalogInput {
+class AnalogInput : public macfe::periph::AnalogInput {
 public:
     AnalogInput(ADC_HandleTypeDef* hadc, uint32_t adc_channel,
                 float system_volts = 3.3f)

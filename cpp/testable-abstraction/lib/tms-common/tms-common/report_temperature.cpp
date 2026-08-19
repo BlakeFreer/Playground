@@ -1,8 +1,8 @@
 #include "report_temperature.hpp"
 
-#include "abstraction.hpp"
+#include "periph.hpp"
 
-using namespace macfe::abstraction;
+using namespace macfe::periph;
 
 namespace macfe::tms {
 
