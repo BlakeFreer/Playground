@@ -2,18 +2,22 @@
 
 #include <string>
 
-namespace macfe::abstraction {
-
-class AnalogInput {
-public:
-    virtual float ReadVoltage() = 0;
-};
+namespace macfe {
 
 class CanMessage {
 public:
     CanMessage(std::string contents_) : contents(contents_) {}
 
     std::string contents;  // example only. real CAN messages aren't strings
+};
+
+}  // namespace macfe
+
+namespace macfe::abstraction {
+
+class AnalogInput {
+public:
+    virtual float ReadVoltage() = 0;
 };
 
 class Can {

@@ -12,7 +12,7 @@ void report_temperatures(AnalogInput& temperature_sensor, Can& can_bus);
 namespace priv {
 
 float volt_to_temperature_degc(float volt);
-abstraction::CanMessage package_can_message(float temperature_degc);
+CanMessage package_can_message(float temperature_degc);
 
 }  // namespace priv
 

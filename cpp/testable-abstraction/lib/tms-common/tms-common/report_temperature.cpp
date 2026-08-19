@@ -12,7 +12,7 @@ float volt_to_temperature_degc(float volts) {
     return volts * 10.0f;
 }
 
-abstraction::CanMessage package_can_message(float temperature_degc) {
+CanMessage package_can_message(float temperature_degc) {
     char buffer[32];
     std::sprintf(buffer, "temperature=%.1fC", temperature_degc);
     return CanMessage(std::string(buffer));
