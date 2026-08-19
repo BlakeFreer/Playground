@@ -147,3 +147,43 @@ With the proposed simpler abstraction system, the entire `project/lvcontroller` 
 This project clearly runs exclusively on STM32. Platform-agnostic behaviour is pulled out to `lvcontroller-lib` which can be tested by a separate SIL binary.
 
 There are no more `bindings.hpp` or `bindings.cc` contracts since the code only needs to run on STM. Platform-abstracted logic defines a small-scale peripheral contract via the function signature.
+
+### Simpler SIL tests
+
+SIL tests can focus on arbitrarily small units of code. They don't need to configure every IO and replicate the entire system's state to test small functions. 
+
+## This directory
+
+This directory demonstrates how TMS could be refactored.
+
+```
+├── lib             // common code shared by all projects
+│   ├── periph      // peripheral abstractions (like racecar/lib/periph)
+│   ├── sil         // SIL peripherals (like racecar/lib/mcal/sil)
+│   ├── stm32       // STM32 peripherals (like racecar/lib/mcal/stm32f)
+│   └── tms-common  // Platform-agnostic TMS code (UNLIKE RACECAR)
+└── projects
+    ├── tms         // regular STM TMS implementation with CubeMX + FreeRTOS (like racecar/projects/tms, but simpler)
+    └── tms-sil     // separate TMS binary for running on SIL (UNLIKE RACECAR)
+```
+
+To compile `tms` for STM32:
+```bash
+cd projects/tms
+pio run
+```
+
+To run `tms-sil` locally:
+```bash
+cd projects/tms-sil
+pio run -t upload
+# the SIL test SHOULD fail as written
+```
+
+This SIL demo runs in the CLI and has no dependencies on `macformula/hil`.
+
+To run `tms-common` unit tests:
+```bash
+cd lib/tms-common
+pio test
+```

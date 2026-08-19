@@ -1,7 +1,9 @@
 #include "gtest/gtest.h"
+#include "periph.hpp"
 #include "tms-common/report_temperature.hpp"
 
 using namespace macfe::tms::priv;
+using macfe::CanMessage;
 
 TEST(Tms, TemperatureToVolt) {
     EXPECT_EQ(volt_to_temperature_degc(1.0f), 10.0f);
