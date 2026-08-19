@@ -2,7 +2,7 @@
 
 The Mac Formula racecar repository has a massive hardware abstraction system. It was designed to allow the entire system to run on any platform, primarily vehicles' STM32 microcontrollers or a SIL.
 
-The abstraction system is too pervasive. It wraps low-level IO types in a `bindings.cc`, far from the App layer, preventing the App from using STM32-specific features. Timers and interrupts are both exluded, but would be invaluable for a real time system.
+The abstraction system is too pervasive. It wraps low-level IO types in a `bindings.cc`, far from the App layer, preventing the App from using STM32-specific features. Timers and interrupts are both useful for a real time system but have ben avoided since they are STM specific.
 
 The abstractions were performed in the name of SIL testability: If the entire system can be mocked, then surely the entire system can be tested. This is goal is too broad. A SIL does not need to run the entire system. That is what a HIL, running STM32 firmare, is for. SIL should lie between unit tests and HIL integration tests.
 
@@ -60,8 +60,6 @@ void test_report_temperatures() {
 }
 ```
 
-
-Further, the extreme platform abstraction limited both Firmware and SIL development. FreeRTOS cannot easily execute on a Linux machine, so most of the boards were non-SIL compliant. A board could either benefit from FreeRTOS or be SIL compliant. We took efforts to port FreeRTOS to Linux, but this is was a major distraction. The class of bugs associated with FreeRTOS (stack overflows, race conditions, task overrum) will not surface on a FreeRTOS simulation. They are inherently hardware specific. The failed FreeRTOS port became a SIL inhibitor.
 
 Both the FreeRTOS task and SIL test can call `report_temperatures()` using their implementation of the peripheral interfaces. This maintains testability of core code, but limits the restrictions of platform abstraction to specific methods. The STM32 code can use platform specific code anywhere outside of the tested method.
 
@@ -152,6 +150,10 @@ There are no more `bindings.hpp` or `bindings.cc` contracts since the code only 
 
 SIL tests can focus on arbitrarily small units of code. They don't need to configure every IO and replicate the entire system's state to test small functions. 
 
+### FreeRTOS compatibility
+
+The extreme platform abstraction limited both Firmware and SIL development. FreeRTOS cannot easily execute on a Linux machine. A board could either benefit from FreeRTOS or be SIL compliant. We took efforts to port FreeRTOS to Linux, but this is was a major distraction. The class of bugs associated with FreeRTOS (stack overflows, race conditions, task overrum) will not surface on a FreeRTOS simulation. They are inherently hardware specific. The failed FreeRTOS port became a SIL inhibitor.
+
 ## This directory
 
 This directory demonstrates how TMS could be refactored.
@@ -167,23 +169,22 @@ This directory demonstrates how TMS could be refactored.
     └── tms-sil     // separate TMS binary for running on SIL (UNLIKE RACECAR)
 ```
 
-To compile `tms` for STM32:
+To run `tms-common` unit tests:
 ```bash
-cd projects/tms
-pio run
+cd lib/tms-common
+pio test
 ```
 
-To run `tms-sil` locally:
+
+To run `tms-sil` locally (this demo does not use `macformula/hil`):
 ```bash
 cd projects/tms-sil
 pio run -t upload
 # the SIL test SHOULD fail as written
 ```
 
-This SIL demo runs in the CLI and has no dependencies on `macformula/hil`.
-
-To run `tms-common` unit tests:
+To compile `tms` for STM32:
 ```bash
-cd lib/tms-common
-pio test
+cd projects/tms
+pio run
 ```
